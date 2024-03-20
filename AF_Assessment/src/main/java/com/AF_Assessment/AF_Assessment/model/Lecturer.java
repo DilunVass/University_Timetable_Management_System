@@ -36,6 +36,7 @@ public class Lecturer {
     @NotEmpty(message = "Last name is required")
     private String lastName;
 
-    private Instant createdAt;
+    @NotEmpty(message = "Type is required")
+    private String type;
 
 }

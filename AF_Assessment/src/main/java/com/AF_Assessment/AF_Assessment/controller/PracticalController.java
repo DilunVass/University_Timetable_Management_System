@@ -1,8 +1,8 @@
 package com.AF_Assessment.AF_Assessment.controller;
 
 
-import com.AF_Assessment.AF_Assessment.model.Lab;
-import com.AF_Assessment.AF_Assessment.service.LabService;
+import com.AF_Assessment.AF_Assessment.model.Practical;
+import com.AF_Assessment.AF_Assessment.repository.PracticalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
-public class LabController {
-    @Autowired
-    private LabService labService;
+@RequestMapping("api/v1")
+public class PracticalController {
 
-    @GetMapping("/labs")
-    public ResponseEntity<List<Lab>> getAllLabs(){
-        return new ResponseEntity<List<Lab>>(labService.getAllLabs(), HttpStatus.OK);
+    @Autowired
+    private PracticalRepository practicalRepository;
+
+    @GetMapping("/pacticals")
+    public ResponseEntity<List<Practical>> getAllPracticals(){
+        return new ResponseEntity<List<Practical>>(practicalRepository.findAll(), HttpStatus.OK);
     }
 }

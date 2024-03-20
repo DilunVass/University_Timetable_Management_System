@@ -20,7 +20,7 @@ import java.time.Instant;
 public class LectureHall {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roomID;
+    private int lectureHallId;
 
     @NotEmpty(message = "Lecture Hall type is required")
     private String type;
@@ -28,5 +28,5 @@ public class LectureHall {
     @NotEmpty(message = "Description is required")
     private String description;
 
-    private Instant createdAt;
+
 }

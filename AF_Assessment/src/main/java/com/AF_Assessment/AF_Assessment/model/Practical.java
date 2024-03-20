@@ -9,18 +9,19 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.time.LocalDate;
 
-@Document(collection = "lectures")
+@Document(collection = "")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Lecture {
+public class Practical {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int lectureId;
+    private int practicalId;
 
     @NotNull(message = "Start time is required")
     private LocalDate startTime;
@@ -32,14 +33,9 @@ public class Lecture {
     @Range(min = 1, max = 10)
     private int duration;
 
-
-    //lectureHall ref
+    //ref lab
 
     //ref lecturer
 
-
-    @NotNull(message = "Subject is required")
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subjects", referencedColumnName = "subjectId")
-    private Subjects subject;
+    //ref subject
 }
