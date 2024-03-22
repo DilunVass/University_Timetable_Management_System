@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import java.time.Instant;
 
 @Document(collection = "subjects")
 @Data
@@ -21,8 +22,7 @@ import javax.persistence.GenerationType;
 @Builder
 public class Subjects {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int subjectID;
+    private String _id;
 
     @NotEmpty(message = "Description is required")
     private String description;
@@ -32,7 +32,11 @@ public class Subjects {
     private int credits;
 
     @NotEmpty(message = "Subject name is required")
-    private String subName;
+    private String name;
 
+    @NotNull(message = "lecturer is required")
+    private String lecturerId;
+
+    private Instant createdAt;
 
 }

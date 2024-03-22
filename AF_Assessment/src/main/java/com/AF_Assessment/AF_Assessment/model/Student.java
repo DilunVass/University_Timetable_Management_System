@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import java.time.Instant;
 import java.util.Set;
 
 @Document(collection = "students")
@@ -19,8 +20,7 @@ import java.util.Set;
 @Builder
 public class Student {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int studentId;
+    private String _id;
 
     @Column(unique = true)
     @NotEmpty(message = "email is required")
@@ -35,6 +35,8 @@ public class Student {
 
     @NotEmpty(message = "Password is required")
     private String password;
+
+    private Instant createdAt;
 
     //ref
     private Set<Subjects> subjects;

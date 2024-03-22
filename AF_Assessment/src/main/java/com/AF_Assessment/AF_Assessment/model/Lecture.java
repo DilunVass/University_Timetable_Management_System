@@ -19,7 +19,6 @@ import java.time.LocalDate;
 @Builder
 public class Lecture {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int lectureId;
 
     @NotNull(message = "Start time is required")
