@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Document(collection = "lectures")
 @Data
@@ -21,19 +22,22 @@ public class Lecture {
     @Id
     private String _id;
 
+    @NotNull(message = "Date is required")
+    private LocalDate date;
+
     @NotNull(message = "Start time is required")
-    private LocalDate startTime;
+    private String startTime;
 
     @NotNull(message = "End time is required")
-    private LocalDate endTime;
+    private int duration;
 
     //lectureHall ref
     @NotNull(message = "lectureHall is required")
     private String lectureHall;
 
     //ref lecturer
-    @NotNull(message = "lecture is required")
-    private String lecture;
+    @NotNull(message = "lecturer is required")
+    private String lecturer;
 
     //ref subject
     @NotNull(message = "Subject is required")

@@ -20,22 +20,30 @@ import java.time.LocalDate;
 @Builder
 public class Practical {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int practicalId;
+    private String _id;
+
+    @NotNull(message = "Date is required")
+    private LocalDate date;
 
     @NotNull(message = "Start time is required")
-    private LocalDate startTime;
+    private String startTime;
 
-    @NotNull(message = "End time is required")
-    private LocalDate endTime;
+//    @NotNull(message = "End time is required")
+//    private LocalDate endTime;
 
     @NotNull(message = "Duration is required")
     @Range(min = 1, max = 10)
     private int duration;
 
     //ref lab
+    @NotNull(message = "Lab is required")
+    private String lab;
 
     //ref lecturer
+    @NotNull(message = "lecturer is required")
+    private String lecturer;
 
     //ref subject
+    @NotNull(message = "subject is required")
+    private String subject;
 }
