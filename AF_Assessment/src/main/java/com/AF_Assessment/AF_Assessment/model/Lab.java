@@ -19,11 +19,13 @@ import java.time.Instant;
 @Builder
 public class Lab {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int labID;
+    private String _id;
 
     @NotEmpty(message = "lab type is required")
     private String type;
+
+    @NotEmpty(message = "lab type is required")
+    private String labCode;
 
     @NotEmpty(message = "Description is required")
     private String description;

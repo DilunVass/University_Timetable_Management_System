@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Document(collection = "students")
@@ -39,5 +40,5 @@ public class Student {
     private Instant createdAt;
 
     //ref
-    private Set<Subjects> subjects;
+    private String[] subjects;
 }

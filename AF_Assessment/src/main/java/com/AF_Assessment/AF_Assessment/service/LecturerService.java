@@ -72,7 +72,7 @@ public class LecturerService {
                 lecturerRepository.save(lecturer);
 
                 lecturerDTO.setLecturerId(Integer.parseInt(savedLecturer.get_id()));
-                
+                savedLecturer = lecturer;
             }
             return savedLecturer;
 

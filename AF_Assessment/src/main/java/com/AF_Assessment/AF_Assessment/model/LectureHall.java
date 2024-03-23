@@ -19,14 +19,16 @@ import java.time.Instant;
 @Builder
 public class LectureHall {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int lectureHallId;
+    private String _id;
 
     @NotEmpty(message = "Lecture Hall type is required")
     private String type;
 
+    @NotEmpty(message = "Lecture Hall code is required")
+    private String hallCode;
+
     @NotEmpty(message = "Description is required")
     private String description;
 
-
+    Instant createdAt;
 }

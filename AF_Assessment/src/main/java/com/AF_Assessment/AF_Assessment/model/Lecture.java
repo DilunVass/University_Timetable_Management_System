@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Builder
 public class Lecture {
     @Id
-    private int lectureId;
+    private String _id;
 
     @NotNull(message = "Start time is required")
     private LocalDate startTime;
@@ -27,18 +27,15 @@ public class Lecture {
     @NotNull(message = "End time is required")
     private LocalDate endTime;
 
-    @NotNull(message = "Duration is required")
-    @Range(min = 1, max = 10)
-    private int duration;
-
-
     //lectureHall ref
+    @NotNull(message = "lectureHall is required")
+    private String lectureHall;
 
     //ref lecturer
+    @NotNull(message = "lecture is required")
+    private String lecture;
 
-
+    //ref subject
     @NotNull(message = "Subject is required")
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subjects", referencedColumnName = "subjectId")
-    private Subjects subject;
+    private String subject;
 }
