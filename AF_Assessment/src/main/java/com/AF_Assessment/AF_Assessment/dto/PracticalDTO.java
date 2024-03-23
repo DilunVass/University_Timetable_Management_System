@@ -1,8 +1,15 @@
 package com.AF_Assessment.AF_Assessment.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PracticalDTO {
     private String id, lab, lecturer, subject;
     //    private String startTime;

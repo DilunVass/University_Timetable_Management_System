@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LecturerDTO {
 
-    private int lecturerId;
+    private String lecturerId;
     private String firstName, lastName, email, type;
 }
