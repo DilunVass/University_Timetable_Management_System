@@ -32,4 +32,26 @@ public class LectureHallController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/updateLectureHall/{hallId}")
+    public ResponseEntity<Object> updateLectureHall(@PathVariable("hallId") String hallId, @RequestBody LectureHallDTO dto) {
+        try {
+            LectureHall updatedHall = lectureHallService.updateLectureHall(hallId, dto);
+            return ResponseEntity.ok(updatedHall);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update lecture hall");
+        }
+    }
+
+    @DeleteMapping("deleteLectureHall/{hallId}")
+    public ResponseEntity<String> deleteLectureHallById(@PathVariable String hallId) {
+        boolean deleted = lectureHallService.deleteLectureHallById(hallId);
+        if (deleted) {
+            return new ResponseEntity<>("Lecture hall with ID " + hallId + " has been deleted", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Lecture hall with ID " + hallId + " not found", HttpStatus.NOT_FOUND);
+        }
+    }
 }

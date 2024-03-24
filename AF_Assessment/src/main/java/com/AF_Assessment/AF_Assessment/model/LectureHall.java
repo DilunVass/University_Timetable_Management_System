@@ -31,4 +31,7 @@ public class LectureHall {
     private String description;
 
     Instant createdAt;
+
+    Instant updatedAt;
+
 }
