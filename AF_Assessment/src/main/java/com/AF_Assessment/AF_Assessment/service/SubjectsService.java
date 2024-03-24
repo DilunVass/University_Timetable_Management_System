@@ -55,51 +55,54 @@ public class SubjectsService {
 
                 }
             }
-
-//            String lectureId = subjectDTO.getLecturerId();
-//            Lecturer lecturer = lecturerRepository.findById(new Lecturer())
-//                    .orElseThrow(() -> new IllegalArgumentException("Lecturer not found"));
-//
-//            if (lecturerOptional.isEmpty()) {
-//                throw new IllegalArgumentException("Lecturer not found");
-//            }
-//
-//            Lecturer lecturer = lecturerOptional.get();
-
-
         } catch (Exception e) {
             // Handle exceptions appropriately (logging, error response, etc.)
             return null;
         }
     }
 
-//    public SubjectDTO addSubject(SubjectDTO dto) {
-//        try{
-//            Optional<Subjects> existing = subjectsRepository.findByName(dto.getName());
-//
-//            if (existing.isPresent()){
-//                throw new IllegalArgumentException("Subject already exists");
-//            }else {
-//                Lecturer lecturer = lecturerRepository.findBy_id(dto.getLecturerId()).orElseThrow(()-> new IllegalArgumentException("Lecturer not found"));
-//
-//                if (dto.getCredits() < 0 || dto.getCredits() > 50) {
-//                  throw new IllegalArgumentException("Invalid credit amount");
-//               }else {
-//                    Subjects subjects = map(dto, String.valueOf(lecturer.get_id()));
-//
-//                    subjectsRepository.save(subjects);
-//
-//                    dto.setLecturerId(String.valueOf(lecturer));
-//                    dto.setSubjectId(subjects.getId());
-//                }
-//
-//            }
-//        }catch (Exception  e){
-//            return null;
-//        }
-//
-//        return null;
-//    }
+
+    public Subjects updateSubject(String subjectId, SubjectDTO updatedSubjectDTO) {
+        // Find the subject by ID
+        Optional<Subjects> optionalSubject = subjectsRepository.findBy_id(subjectId);
+
+        // Check if the subject exists
+        if (optionalSubject.isPresent()) {
+            Subjects existingSubject = optionalSubject.get();
+
+            // Update the subject fields with new values
+            existingSubject.setName(updatedSubjectDTO.getName());
+            existingSubject.setCredits(updatedSubjectDTO.getCredits());
+            existingSubject.setDescription(updatedSubjectDTO.getDescription());
+            existingSubject.setLecturerId(updatedSubjectDTO.getLecturerId());
+            // Assuming other fields are also updated
+
+            // Save the updated subject
+            Subjects updatedSubject = subjectsRepository.save(existingSubject);
+
+            return updatedSubject;
+        } else {
+            // If the subject doesn't exist, return null or handle the case accordingly
+            return null;
+        }
+    }
+
+    public boolean deleteSubject(String subjectId) {
+        try {
+            // Check if the subject exists
+            if (subjectsRepository.existsBy_id(subjectId)) {
+                // If the subject exists, delete it
+                subjectsRepository.deleteBy_id(subjectId);
+                return true; // Return true to indicate successful deletion
+            } else {
+                // If the subject doesn't exist, return false
+                return false;
+            }
+        } catch (Exception e) {
+            // Handle any exceptions (e.g., database errors)
+            return false;
+        }
+    }
 
     private Subjects map(SubjectDTO subjectDTO) {
         return Subjects.builder()
@@ -110,6 +113,8 @@ public class SubjectsService {
                 .lecturerId(subjectDTO.getLecturerId())
                 .build();
     }
+
+
 
     public List<Subjects> getAllSubjects(){
         return subjectsRepository.findAll();

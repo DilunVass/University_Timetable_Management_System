@@ -13,4 +13,8 @@ public interface SubjectsRepository extends MongoRepository<Subjects, ObjectId> 
 
 
     Optional<Subjects> findBy_id(String subjects);
+
+    boolean existsBy_id(String subjectId);
+
+    void deleteBy_id(String subjectId);
 }

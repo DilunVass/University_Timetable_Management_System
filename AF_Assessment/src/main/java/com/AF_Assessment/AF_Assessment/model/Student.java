@@ -39,6 +39,8 @@ public class Student {
 
     private Instant createdAt;
 
+    private Instant updatedAt;
+
     //ref
     private String[] subjects;
 }

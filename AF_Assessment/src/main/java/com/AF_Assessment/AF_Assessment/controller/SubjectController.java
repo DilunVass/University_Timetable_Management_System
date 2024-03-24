@@ -56,4 +56,27 @@ public class SubjectController {
         }
     }
 
+    @PutMapping("/updateSubject/{subjectId}")
+    public ResponseEntity<Subjects> updateSubject(@PathVariable String subjectId, @RequestBody SubjectDTO updatedSubjectDTO) {
+        // Call the service method to update the subject
+        Subjects updatedSubject = subjectsService.updateSubject(subjectId, updatedSubjectDTO);
+
+        // Check if the subject was successfully updated
+        if (updatedSubject != null) {
+            return new ResponseEntity<>(updatedSubject, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/deleteSubject/{subjectId}")
+    public ResponseEntity<String> deleteSubject(@PathVariable String subjectId) {
+        boolean deleted = subjectsService.deleteSubject(subjectId);
+        if (deleted) {
+            return new ResponseEntity<>("Subject deleted successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Subject not found or unable to delete", HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
