@@ -57,6 +57,49 @@ public class StudentService {
         return null;
     }
 
+    public Student updateStudent(String studentId, StudentDTO updatedStudentDTO) {
+        // Retrieve the existing student from the database
+        Optional<Student> existingStudentOptional = studentRepository.findBy_id(studentId);
+
+        if (existingStudentOptional.isPresent()) {
+            // Student exists, update its fields
+            Student existingStudent = existingStudentOptional.get();
+
+            // Update fields if provided in the DTO
+            if (updatedStudentDTO.getFirstName() != null) {
+                existingStudent.setFirstName(updatedStudentDTO.getFirstName());
+            }
+            if (updatedStudentDTO.getLastName() != null) {
+                existingStudent.setLastName(updatedStudentDTO.getLastName());
+            }
+            if (updatedStudentDTO.getEmail() != null) {
+                // Validate and update email
+                if (ExtraUtilities.isEmailValid(updatedStudentDTO.getEmail())) {
+                    existingStudent.setEmail(updatedStudentDTO.getEmail());
+                } else {
+                    throw new IllegalArgumentException("Invalid email");
+                }
+            }
+            if (updatedStudentDTO.getPassword() != null) {
+                existingStudent.setPassword(updatedStudentDTO.getPassword());
+            }
+            // Optionally, update other fields as needed
+
+            // Set the updated timestamp
+            existingStudent.setUpdatedAt(Instant.now());
+
+            // Save the updated student back to the database
+            return studentRepository.save(existingStudent);
+        } else {
+            // Student with the given ID not found
+            throw new IllegalArgumentException("Student not found");
+        }
+    }
+
+    public void deleteStudent(String studentId) {
+        studentRepository.deleteBy_id(studentId);
+    }
+
 
     private Student map(StudentDTO dto){
         return Student.builder()

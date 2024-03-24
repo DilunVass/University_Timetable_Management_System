@@ -33,4 +33,28 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/updateStudent/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable("id") String studentId, @RequestBody StudentDTO updatedStudentDTO) {
+        // Call the service method to update the student
+        Student updatedStudent = studentService.updateStudent(studentId, updatedStudentDTO);
+
+        if (updatedStudent != null) {
+            // Student successfully updated
+            return ResponseEntity.ok(updatedStudent);
+        } else {
+            // Student not found or failed to update
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @DeleteMapping("/deleteStudent/{studentId}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable String studentId) {
+        try {
+            studentService.deleteStudent(studentId);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
