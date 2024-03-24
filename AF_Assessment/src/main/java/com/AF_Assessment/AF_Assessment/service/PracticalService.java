@@ -6,9 +6,11 @@ import com.AF_Assessment.AF_Assessment.repository.LabRepository;
 import com.AF_Assessment.AF_Assessment.repository.LecturerRepository;
 import com.AF_Assessment.AF_Assessment.repository.PracticalRepository;
 import com.AF_Assessment.AF_Assessment.repository.SubjectsRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -73,6 +75,32 @@ public class PracticalService {
         }
 
         return result;
+    }
+
+    public Practical updatePractical(String id, PracticalDTO dto) {
+        Optional<Practical> optionalPractical = practicalRepository.findBy_id(id);
+
+        if (optionalPractical.isPresent()) {
+            Practical practical = optionalPractical.get();
+            // Update practical properties from DTO
+            BeanUtils.copyProperties(dto, practical);
+            // Set the updated at timestamp
+            practical.setUpdatedAt(Instant.now());
+
+            return practicalRepository.save(practical);
+        } else {
+            // Practical with the given ID not found
+            throw new IllegalArgumentException("Practical not found with ID: " + id);
+        }
+    }
+
+    public void deletePractical(String id) {
+        Optional<Practical> existingPractical = practicalRepository.findBy_id(id);
+        if (existingPractical.isPresent()) {
+            practicalRepository.deleteBy_id(id);
+        } else {
+            throw new IllegalArgumentException("Practical with ID " + id + " does not exist");
+        }
     }
 
     private Practical map(PracticalDTO dto){

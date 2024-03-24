@@ -143,6 +143,31 @@ public class LectureService {
         return null;
     }
 
+    public Lecture updateLecture(String lectureId, LectureDTO dto) {
+        // Find the lecture by ID
+        Optional<Lecture> optionalLecture = lectureRepository.findBy_id(lectureId);
+        if (optionalLecture.isPresent()) {
+            Lecture lecture = optionalLecture.get();
+            // Update lecture properties based on DTO values
+            lecture.setDate(dto.getDate());
+            lecture.setStartTime(String.valueOf(dto.getStartTime()));
+            lecture.setDuration(dto.getDuration());
+            lecture.setSubject(dto.getSubject());
+            lecture.setLecturer(dto.getLecturer());
+            lecture.setLectureHall(dto.getLectureHall());
+            // Save the updated lecture
+            return lectureRepository.save(lecture);
+        } else {
+            // If the lecture is not found, return null or throw an exception
+            return null; // or throw new LectureNotFoundException("Lecture not found");
+        }
+    }
+
+    // Delete a lecture by ID
+    public void deleteLecture(String lectureId) {
+        lectureRepository.deleteBy_id(lectureId);
+    }
+
     private Lecture map(LectureDTO dto){
         return Lecture.builder()
                 .date(dto.getDate())

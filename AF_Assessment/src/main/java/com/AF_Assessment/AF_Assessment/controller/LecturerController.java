@@ -62,7 +62,7 @@ public class LecturerController {
         }
     }
 
-    @PutMapping("updateLecture/{id}")
+    @PutMapping("updateLecturer/{id}")
     public ResponseEntity<Object> updateLecturer(@PathVariable String id, @RequestBody LecturerDTO dto){
         dto.setLecturerId(id); // Set the lecturer ID from the path variable
         boolean updated = lecturerService.updateLecturer(dto);

@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Document(collection = "")
@@ -46,4 +47,6 @@ public class Practical {
     //ref subject
     @NotNull(message = "subject is required")
     private String subject;
+
+    Instant updatedAt;
 }
