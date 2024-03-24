@@ -33,4 +33,20 @@ public class PracticalController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/updatePractical/{id}")
+    public ResponseEntity<Practical> updatePractical(@PathVariable String id, @RequestBody PracticalDTO dto) {
+        Practical updatedPractical = practicalService.updatePractical(id, dto);
+        return new ResponseEntity<>(updatedPractical, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deletePractical/{id}")
+    public ResponseEntity<String> deletePractical(@PathVariable String id) {
+        try {
+            practicalService.deletePractical(id);
+            return new ResponseEntity<>("Practical with ID " + id + " deleted successfully", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }
