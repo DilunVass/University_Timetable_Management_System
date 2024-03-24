@@ -32,4 +32,17 @@ public class LabController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("updateLab/{labId}")
+    public ResponseEntity<Lab> updateLab(@PathVariable String labId, @RequestBody LabDTO labDTO) {
+        Lab updatedLab = labService.updateLab(labId, labDTO);
+        return new ResponseEntity<>(updatedLab, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/lab/{labId}")
+    public ResponseEntity<Void> deleteLab(@PathVariable String labId) {
+        labService.deleteLabById(labId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

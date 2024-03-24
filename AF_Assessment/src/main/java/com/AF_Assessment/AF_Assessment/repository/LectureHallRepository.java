@@ -8,4 +8,8 @@ import java.util.Optional;
 
 public interface LectureHallRepository extends MongoRepository<LectureHall, ObjectId> {
     Optional<LectureHall> findLectureHallByHallCode(String code);
+
+    Optional<LectureHall> findBy_id(String hallId);
+
+    void deleteBy_id(String hallId);
 }

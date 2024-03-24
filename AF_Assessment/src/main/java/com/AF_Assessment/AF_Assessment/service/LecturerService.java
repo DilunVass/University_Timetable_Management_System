@@ -29,28 +29,6 @@ public class LecturerService {
     private MongoTemplate mongoTemplate;
 
 
-//    public Lecturer addLecturer(String firstName, String lastName, String email, String type){
-//        Lecturer lecturer = lecturerRepository.insert(new Lecturer(firstName,lastName, email, type));
-//
-//        mongoTemplate.update(Lecturer.class)
-//                .matching(Criteria.where("email").is(email))
-//                .apply(new Update().push("id").value(lecturer.getId()))
-//                .first();
-//        return lecturer;
-//    }
-
-//    public Lecturer addLecturer(String firstName, String lastName, String email, String type) {
-//        Lecturer lecturer = new Lecturer(firstName, lastName, email, type);
-//        lecturer = lecturerRepository.insert(lecturer);
-//
-//        Query query = new Query(Criteria.where("email").is(email));
-//        Update update = new Update().set("_id", lecturer.get_id());
-//        mongoTemplate.updateFirst(query, update, Lecturer.class);
-//
-//        return lecturer;
-//    }
-
-
     public Lecturer addLecturer(LecturerDTO lecturerDTO) {
 
         try{
@@ -71,7 +49,7 @@ public class LecturerService {
 
                 lecturerRepository.save(lecturer);
 
-                lecturerDTO.setLecturerId(Integer.parseInt(savedLecturer.get_id()));
+                lecturerDTO.setLecturerId(savedLecturer.get_id());
                 savedLecturer = lecturer;
             }
             return savedLecturer;
@@ -82,9 +60,55 @@ public class LecturerService {
 
     }
 
+    public Optional<Lecturer> getLecturerById(String lecturerId) {
+        return lecturerRepository.findBy_id(lecturerId);
+    }
+
+    public boolean deleteLecturerById(String lecturerId) {
+        try {
+            // Check if the lecturer exists
+            Optional<Lecturer> optionalLecturer = lecturerRepository.findBy_id(lecturerId);
+            if (optionalLecturer.isPresent()) {
+                // Delete the lecturer if it exists
+                lecturerRepository.deleteBy_id(lecturerId);
+                return true; // Deletion successful
+            } else {
+                // Lecturer not found
+                return false;
+            }
+        } catch (Exception e) {
+            // Handle exceptions, log errors, or return false if deletion fails
+            return false;
+        }
+    }
+
     private Lecturer map(LecturerDTO dto){
         return Lecturer.builder().firstName(dto.getFirstName()).createdAt(Instant.now())
                 .lastName(dto.getLastName()).email(dto.getEmail()).type(dto.getType().toLowerCase()).build();
+    }
+
+    public boolean updateLecturer(LecturerDTO lecturerDTO) {
+        try {
+            Optional<Lecturer> existingLecturer = lecturerRepository.findBy_id(lecturerDTO.getLecturerId());
+            if (existingLecturer.isPresent()) {
+                Lecturer lecturerToUpdate = existingLecturer.get();
+                // Update lecturer details based on DTO
+                lecturerToUpdate.setFirstName(lecturerDTO.getFirstName());
+                lecturerToUpdate.setLastName(lecturerDTO.getLastName());
+                lecturerToUpdate.setEmail(lecturerDTO.getEmail());
+                lecturerToUpdate.setType(lecturerDTO.getType());
+
+                // Save the updated lecturer
+                lecturerRepository.save(lecturerToUpdate);
+                return true; // Update successful
+            } else {
+                return false; // Lecturer not found
+            }
+        } catch (Exception e) {
+            // Handle exceptions
+            e.printStackTrace();
+            return false; // Update failed
+        }
     }
 
 

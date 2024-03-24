@@ -46,6 +46,23 @@ public class LabService {
         }
     }
 
+    public Lab updateLab(String labId, LabDTO dto) {
+        Optional<Lab> existingLabOptional = labRepository.findBy_id(labId);
+        if (existingLabOptional.isPresent()) {
+            Lab existingLab = existingLabOptional.get();
+            Lab updatedLab = map(dto);
+            updatedLab.set_id(existingLab.get_id());
+            updatedLab.setCreatedAt(existingLab.getCreatedAt());
+            return labRepository.save(updatedLab);
+        } else {
+            throw new IllegalArgumentException("Lab not found");
+        }
+    }
+
+    public void deleteLabById(String labId) {
+        labRepository.deleteBy_id(labId);
+    }
+
 
     private Lab map(LabDTO dto){
         return Lab.builder()

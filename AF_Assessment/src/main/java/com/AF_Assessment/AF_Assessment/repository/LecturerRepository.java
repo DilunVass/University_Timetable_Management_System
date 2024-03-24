@@ -12,4 +12,5 @@ public interface LecturerRepository extends MongoRepository<Lecturer, ObjectId> 
 
     Optional<Lecturer> findBy_id(String id);
 
+    void deleteBy_id(String lecturerId);
 }

@@ -9,4 +9,7 @@ import java.util.Optional;
 public interface LabRepository extends MongoRepository<Lab, ObjectId> {
     Optional<Lab> findLabByLabCode(String code);
 
+    Optional<Lab> findBy_id(String labId);
+
+    void deleteBy_id(String labId);
 }
