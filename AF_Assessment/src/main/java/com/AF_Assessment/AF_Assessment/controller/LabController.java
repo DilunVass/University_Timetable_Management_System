@@ -1,6 +1,5 @@
 package com.AF_Assessment.AF_Assessment.controller;
 
-
 import com.AF_Assessment.AF_Assessment.dto.LabDTO;
 import com.AF_Assessment.AF_Assessment.model.Lab;
 import com.AF_Assessment.AF_Assessment.service.LabService;
@@ -44,5 +43,7 @@ public class LabController {
         labService.deleteLabById(labId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
 
 }
