@@ -1,7 +1,6 @@
 package com.AF_Assessment.AF_Assessment.JWT;
 
 import org.springframework.stereotype.Component;
-
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 
@@ -21,5 +20,4 @@ final class KeyGeneratorUtils {
         }
         return keyPair;
     }
-
 }

@@ -1,12 +1,13 @@
 package com.AF_Assessment.AF_Assessment.JWT;
 
+import com.AF_Assessment.AF_Assessment.model.Student;
+import com.AF_Assessment.AF_Assessment.repository.StudentRepository;
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,8 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.ser
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -29,58 +32,28 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.List;
-
-import static org.springframework.security.config.Customizer.withDefaults;
+import java.util.Optional;
 
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class config {
 
-//    private final keyProperties rsaKeys;
-//
-//    public config(keyProperties rsaKeys) {
-//        this.rsaKeys = rsaKeys;
-//    }
-//
 //    @Bean
-//    public InMemoryUserDetailsManager user(){
-//        return new InMemoryUserDetailsManager(
-//                User.withUsername("dilun")
-//                        .password("{noop}password")
-//                        .authorities("read")
-//                        .build()
-//        );
-//    }
-//
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        return http
-//                .csrf(csrf -> csrf.disable())
-//                .authorizeRequests( auth -> auth
-//                        .anyRequest().authenticated()
-//                )
-//                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .httpBasic(withDefaults())
+//    public SecurityFilterChain defaultFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        return httpSecurity
+//                .csrf(csrf-> csrf.disable())
+//                .authorizeHttpRequests(auth-> auth.requestMatchers("/token","/error").permitAll()
+//                        .anyRequest().authenticated())
+//                .httpBasic(Customizer.withDefaults())
+//                .formLogin(Customizer.withDefaults())
 //                .build();
-//    }
-//
-//    @Bean
-//    JwtDecoder jwtDecoder() {
-//        return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
-//    }
-//
-//    @Bean
-//    JwtEncoder jwtEncoder() {
-//        JWK jwk = new RSAKey.Builder(rsaKeys.publicKey()).privateKey(rsaKeys.privateKey()).build();
-//        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
-//        return new NimbusJwtEncoder(jwks);
 //    }
 
     private RSAKey rsaKey;
+    private final StudentRepository studentRepository;
 
     @Bean
     public AuthenticationManager authManager(UserDetailsService userDetailsService) {
@@ -91,6 +64,7 @@ public class config {
 
     @Bean
     public UserDetailsService userDetailsService() {
+      //  Optional<Student> student = studentRepository.findStudentByEmail(email);
         return new InMemoryUserDetailsManager(
                 User.withUsername("dilun")
                         .password("{noop}password")
@@ -139,5 +113,10 @@ public class config {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",configuration);
         return source;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 }
