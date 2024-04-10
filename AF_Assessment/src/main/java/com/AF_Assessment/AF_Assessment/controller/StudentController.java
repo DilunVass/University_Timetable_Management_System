@@ -24,7 +24,7 @@ public class StudentController {
 
     @PostMapping("addstudent")
     public ResponseEntity<Object> addStudent(@RequestBody StudentDTO dto){
-        Student result = null;
+        ResponseEntity result = null;
 
         try{
             result = studentService.addStudent(dto);
