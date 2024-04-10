@@ -6,7 +6,11 @@ import com.AF_Assessment.AF_Assessment.model.Subjects;
 import com.AF_Assessment.AF_Assessment.repository.StudentRepository;
 import com.AF_Assessment.AF_Assessment.repository.SubjectsRepository;
 import com.AF_Assessment.AF_Assessment.util.ExtraUtilities;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -15,25 +19,27 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@AllArgsConstructor
 public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
     private SubjectsRepository subjectsRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<Student> getAllStudents(){
         return studentRepository.findAll();
     }
 
-    public Student addStudent(StudentDTO dto){
+    public ResponseEntity addStudent(StudentDTO dto){
         try{
             Optional<Student> existing = studentRepository.findStudentByEmail(dto.getEmail());
 
             Student savedStudent = null;
 
             if (existing.isPresent()){
-                throw new IllegalArgumentException("Email already exists");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already taken. Please try again");
             }else {
                 if (!ExtraUtilities.isEmailValid(dto.getEmail())) {
                     throw new IllegalArgumentException("Invalid email");
@@ -45,14 +51,14 @@ public class StudentService {
                         studentRepository.save(student);
 
                         dto.setId(savedStudent.get_id());
-                        return savedStudent;
+                        return ResponseEntity.ok(HttpStatus.CREATED);
                     }
 
                 }
             }
 
         }catch (Exception e){
-            return null;
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return null;
     }
@@ -100,14 +106,19 @@ public class StudentService {
         studentRepository.deleteBy_id(studentId);
     }
 
+    private String passwordEncoder(String pass){
+        return passwordEncoder.encode(pass);
+    }
 
     private Student map(StudentDTO dto){
         return Student.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .email(dto.getEmail())
-                .password(dto.getPassword())
+                .password(passwordEncoder(dto.getPassword()))
                 .subjects(dto.getSubjects())
+                .user("student")
+                .pass("bhtd123")
                 .createdAt(Instant.now())
                 .build();
     }

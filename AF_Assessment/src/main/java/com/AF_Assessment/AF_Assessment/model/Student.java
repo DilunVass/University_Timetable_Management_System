@@ -40,4 +40,8 @@ public class Student {
 
     //ref
     private String[] subjects;
+
+    //token
+    private String user;
+    private String pass;
 }

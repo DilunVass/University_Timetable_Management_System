@@ -1,13 +1,12 @@
 package com.AF_Assessment.AF_Assessment.JWT;
 
+
 import com.AF_Assessment.AF_Assessment.model.Student;
-import com.AF_Assessment.AF_Assessment.repository.StudentRepository;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,28 +32,28 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
-import java.util.Optional;
 
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
 public class config {
 
-//    @Bean
-//    public SecurityFilterChain defaultFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        return httpSecurity
-//                .csrf(csrf-> csrf.disable())
-//                .authorizeHttpRequests(auth-> auth.requestMatchers("/token","/error").permitAll()
-//                        .anyRequest().authenticated())
-//                .httpBasic(Customizer.withDefaults())
-//                .formLogin(Customizer.withDefaults())
-//                .build();
-//    }
-
     private RSAKey rsaKey;
-    private final StudentRepository studentRepository;
 
+    private Student student;
+
+    private String username = "student";
+    private String password = "bhtd123";
+
+    public void get_student(Student st){
+        this.student = st;
+    }
+    private void setUsername(){
+        if (student.getEmail() != null){
+            username = student.getEmail();
+        }
+        else username = username;
+    }
     @Bean
     public AuthenticationManager authManager(UserDetailsService userDetailsService) {
         var authProvider = new DaoAuthenticationProvider();
@@ -64,14 +63,16 @@ public class config {
 
     @Bean
     public UserDetailsService userDetailsService() {
-      //  Optional<Student> student = studentRepository.findStudentByEmail(email);
         return new InMemoryUserDetailsManager(
-                User.withUsername("dilun")
-                        .password("{noop}password")
+                User.withUsername(username)
+                        .password("{noop}" + password)
                         .authorities("read")
                         .build()
         );
     }
+
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
