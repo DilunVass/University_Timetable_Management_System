@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,15 +62,36 @@ public class config {
         return new ProviderManager(authProvider);
     }
 
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//
+//        return new InMemoryUserDetailsManager(
+//                User.withUsername(username)
+//                        .password("{noop}" + password)
+//                        .authorities("read")
+//                        .build()
+//        );
+//    }
+
     @Bean
     public UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(
-                User.withUsername(username)
-                        .password("{noop}" + password)
-                        .authorities("read")
-                        .build()
-        );
+
+        UserDetails user = User.builder()
+                .username("student")
+                .password("{noop}" + password)
+                .authorities("read")
+                .roles("USER")
+                .build();
+
+        UserDetails lecturer = User.builder()
+                .username("lecturer")
+                .password("{noop}" + password)
+                .authorities("read")
+                .roles("USER", "ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(user, lecturer);
     }
+
 
 
 
