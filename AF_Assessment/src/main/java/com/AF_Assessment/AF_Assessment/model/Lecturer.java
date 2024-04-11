@@ -86,6 +86,9 @@ public class Lecturer {
     @Email(message = "Invalid email type...")
     private String email;
 
+    @NotEmpty
+    private String password;
+
     @NotEmpty(message = "Type is required")
     private String type;
 
@@ -98,5 +101,9 @@ public class Lecturer {
         this.type = type;
 
     }
+
+    //token
+    private String user;
+    private String pass;
 }
 

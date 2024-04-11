@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class LecturerDTO {
 
     private String lecturerId;
-    private String firstName, lastName, email, type;
+    private String firstName, lastName, email, password, type;
 }

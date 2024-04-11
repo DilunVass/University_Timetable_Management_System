@@ -39,6 +39,7 @@ import java.util.List;
 @EnableWebSecurity
 public class config {
 
+    private static final String SYS_ADMIN_PATTERNS = "/api/vi/subjects";
     private RSAKey rsaKey;
 
     private Student student;
@@ -62,17 +63,6 @@ public class config {
         return new ProviderManager(authProvider);
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//
-//        return new InMemoryUserDetailsManager(
-//                User.withUsername(username)
-//                        .password("{noop}" + password)
-//                        .authorities("read")
-//                        .build()
-//        );
-//    }
-
     @Bean
     public UserDetailsService userDetailsService() {
 
@@ -94,8 +84,6 @@ public class config {
 
 
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -103,12 +91,15 @@ public class config {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( auth -> auth
                         .requestMatchers("/token").permitAll()
+                        .requestMatchers("/api/v1/lecturers").authenticated()
+                        .requestMatchers(SYS_ADMIN_PATTERNS).hasAnyAuthority("SYSTEM_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .build();
     }
+
 
     @Bean
     public JWKSource<SecurityContext> jwkSource() {

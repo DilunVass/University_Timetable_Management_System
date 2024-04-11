@@ -1,7 +1,9 @@
 package com.AF_Assessment.AF_Assessment.controller;
 
 import com.AF_Assessment.AF_Assessment.dto.LoginDTO;
+import com.AF_Assessment.AF_Assessment.model.Lecturer;
 import com.AF_Assessment.AF_Assessment.model.Student;
+import com.AF_Assessment.AF_Assessment.repository.LecturerRepository;
 import com.AF_Assessment.AF_Assessment.repository.StudentRepository;
 import com.AF_Assessment.AF_Assessment.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class AuthController {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private LecturerRepository lecturerRepository;
+
     private String username = "dilun";
 
     @Autowired
@@ -48,9 +53,16 @@ public class AuthController {
 
     @PostMapping("/token")
     public String login(@RequestBody LoginDTO loginRequest) throws AuthenticationException{
+
+        //get users models
         Optional<Student> ex = studentRepository.findStudentByEmail(loginRequest.getUsername());
-        String token = "";
+        Optional<Lecturer> lecturer = lecturerRepository.findLecturerByEmail(loginRequest.getUsername());
+
         Student student;
+        Lecturer lecturer1;
+
+        String token = "";
+
         String feedback = "";
         //String logUsername = loginRequest.getUsername();
 
@@ -69,9 +81,17 @@ public class AuthController {
                 }
 
                // feedback = "login username : " + loginRequest.getUsername() + "\nlogin password : " + loginRequest.getPassword() + "\ntrue username : " + student.getEmail() + "\ntrue password : " + student.getPassword();
-            }else {
+            } else {
                 token = "Login user Email is incorrect....";
             }
+        }else if (lecturer.isPresent()) {
+            lecturer1 = lecturer.get();
+
+            if (passwordEncoder.matches(loginRequest.getPassword(), lecturer1.getPassword())){
+                token = token(lecturer1.getUser(), lecturer1.getPass());
+                feedback = "User :" + lecturer1.getFirstName() + " is logged";
+            }
+
         }
         return feedback + "\n" + token;
     }

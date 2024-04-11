@@ -42,4 +42,5 @@ public class Lecture {
     //ref subject
     @NotNull(message = "Subject is required")
     private String subject;
+
 }

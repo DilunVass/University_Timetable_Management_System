@@ -7,6 +7,7 @@ import com.AF_Assessment.AF_Assessment.util.ExtraUtilities;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 //import java.security.KeyException;
@@ -27,6 +28,12 @@ public class LecturerService {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private String passwordEncoder(String pass){
+        return passwordEncoder.encode(pass);
+    }
 
 
     public Lecturer addLecturer(LecturerDTO lecturerDTO) {
@@ -84,7 +91,7 @@ public class LecturerService {
 
     private Lecturer map(LecturerDTO dto){
         return Lecturer.builder().firstName(dto.getFirstName()).createdAt(Instant.now())
-                .lastName(dto.getLastName()).email(dto.getEmail()).type(dto.getType().toLowerCase()).build();
+                .lastName(dto.getLastName()).email(dto.getEmail()).password(passwordEncoder(dto.getPassword())).type(dto.getType().toLowerCase()).user("lecturer").pass("bhtd123").build();
     }
 
     public boolean updateLecturer(LecturerDTO lecturerDTO) {
@@ -97,7 +104,7 @@ public class LecturerService {
                 lecturerToUpdate.setLastName(lecturerDTO.getLastName());
                 lecturerToUpdate.setEmail(lecturerDTO.getEmail());
                 lecturerToUpdate.setType(lecturerDTO.getType());
-
+                lecturerToUpdate.setPassword(passwordEncoder(lecturerDTO.getPassword()));
                 // Save the updated lecturer
                 lecturerRepository.save(lecturerToUpdate);
                 return true; // Update successful
