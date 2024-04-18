@@ -93,7 +93,7 @@ public class AuthController {
             }
 
         }
-        return feedback + "\n" + token;
+        return token;
     }
 
 
