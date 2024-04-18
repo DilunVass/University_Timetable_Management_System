@@ -55,7 +55,7 @@ public class LabAPITests {
     @Test
     void testAddLabSuccess() throws Exception {
 
-        String requestBody = "{\"type\": \"Computer Science\", \"labCode\" : \"A504\", \"description\": \"This is main building property.\"}";
+        String requestBody = "{\"type\": \"Computer Science\", \"labCode\" : \"A508\", \"description\": \"This is main building property.\"}";
 
         mockMvc.perform(MockMvcRequestBuilders.post(baseUrl + "/api/v1/addlab")
                         .header("Authorization", "Bearer " + token)
@@ -67,7 +67,29 @@ public class LabAPITests {
 
     @Test
     void testUpdateLabSuccess() throws Exception {
-        
+
+        String LabId = "65fe41f6c456905b5891a938";
+        String requestBody = "{\"type\": \"Computer Science\", \"labCode\" : \"A506\", \"description\": \"This is main building property.\"}";
+
+        mockMvc.perform(MockMvcRequestBuilders.put(baseUrl + "/api/v1/updateLab/" + LabId)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testDeleteLabSuccess() throws Exception {
+
+        String LabId = "66219602c0d9df3dd6a539e7";
+
+        // Perform DELETE request to delete the lecturer
+        mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/api/v1/lab/" + LabId)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isNoContent());
+
     }
 
 }
