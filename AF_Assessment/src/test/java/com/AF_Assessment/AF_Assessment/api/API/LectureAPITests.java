@@ -50,4 +50,21 @@ public class LectureAPITests {
 
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void testAddLectureSuccess() throws Exception {
+        String requestBody = "{\"date\" : \"2024-05-12\", \"startTime\": \"13:30\", \"duration\" : \"5\", \"subject\" : \"SPM\", \"lectureHall\": \"A503\", \"lecturer\": \"dilun@gmail.com\"}";
+
+        mockMvc.perform(MockMvcRequestBuilders.post(baseUrl + "/api/v1/addLecture")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testUpdateLecture() throws Exception {
+        
+    }
 }
