@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -51,14 +52,14 @@ public class LectureHallAPITests {
     }
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void testAddLectureHallSuccess() throws Exception {
 
-        String requestBody = "{\"type\": \"Computer Science\", \"hallCode\": \"A608\", \"description\": \"This is main building property}\"}";
+        String requestBody = "{\"type\": \"Computer Science\", \"hallCode\": \"A709\", \"description\": \"This is main building property}\"}";
 
         mockMvc.perform(MockMvcRequestBuilders.post(baseUrl + "/api/v1/addlecturehall")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk());
     }
@@ -66,7 +67,7 @@ public class LectureHallAPITests {
     @Test
     void testUpdateLectureHallSuccess() throws Exception {
         String lectureHallId = "66211bb74622bf4d35cf219b";
-        String requestBody = "{\"type\": \"Computer Science\", \"hallCode\": \"A609\", \"description\": \"This is main building property}\"}";
+        String requestBody = "{\"type\": \"Computer Science\", \"hallCode\": \"A709\", \"description\": \"This is main building property}\"}";
 
         mockMvc.perform(MockMvcRequestBuilders.put(baseUrl + "/api/v1/updateLectureHall/" + lectureHallId)
                         .header("Authorization", "Bearer " + token)
@@ -76,8 +77,9 @@ public class LectureHallAPITests {
     }
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void testDeleteLectureHallSuccess() throws Exception {
-        String lectureHallId = "660003e4b223e57b5b7218ca";
+        String lectureHallId = "6621f90af1bc5902f128fec3";
 
         // Perform DELETE request to delete the lecture hall
         mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/api/v1/deleteLectureHall/" + lectureHallId)

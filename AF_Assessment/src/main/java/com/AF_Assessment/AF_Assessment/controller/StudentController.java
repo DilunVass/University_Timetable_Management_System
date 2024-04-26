@@ -3,6 +3,7 @@ package com.AF_Assessment.AF_Assessment.controller;
 
 import com.AF_Assessment.AF_Assessment.dto.StudentDTO;
 import com.AF_Assessment.AF_Assessment.model.Student;
+import com.AF_Assessment.AF_Assessment.service.EmailSenderService;
 import com.AF_Assessment.AF_Assessment.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,8 @@ import java.util.List;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+
+
 
     @GetMapping("/students")
     public ResponseEntity<List<Student>> getAllStudents(){
@@ -54,6 +57,16 @@ public class StudentController {
             studentService.deleteStudent(studentId);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("getlectures/{studentId}")
+    public ResponseEntity<String> getStudentLectures(@PathVariable String studentId){
+        try {
+            studentService.getStudentLectures(studentId);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

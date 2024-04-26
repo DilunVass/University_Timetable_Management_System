@@ -1,11 +1,14 @@
 package com.AF_Assessment.AF_Assessment.service;
 
 import com.AF_Assessment.AF_Assessment.dto.StudentDTO;
+import com.AF_Assessment.AF_Assessment.model.Lecture;
 import com.AF_Assessment.AF_Assessment.model.Student;
 import com.AF_Assessment.AF_Assessment.model.Subjects;
+import com.AF_Assessment.AF_Assessment.repository.LectureRepository;
 import com.AF_Assessment.AF_Assessment.repository.StudentRepository;
 import com.AF_Assessment.AF_Assessment.repository.SubjectsRepository;
 import com.AF_Assessment.AF_Assessment.util.ExtraUtilities;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +29,14 @@ public class StudentService {
 
     @Autowired
     private SubjectsRepository subjectsRepository;
+
+    @Autowired
+    private LectureRepository lectureRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailSenderService senderService;
+
 
     public List<Student> getAllStudents(){
         return studentRepository.findAll();
@@ -104,6 +114,55 @@ public class StudentService {
 
     public void deleteStudent(String studentId) {
         studentRepository.deleteBy_id(studentId);
+    }
+
+    public ResponseEntity getStudentLectures(String studentId){
+        try {
+            Optional<Student> student = studentRepository.findBy_id(studentId);
+            Student stud = student.get();
+
+            String[] subjects;
+            String[] sub;
+            String EmailSubject;
+            String EmailBody;
+
+            if (student.isPresent()){
+
+                subjects = stud.getSubjects();
+
+                int i=0;
+
+                for (i=0; i<subjects.length; i++){
+                    Optional<Subjects> s = subjectsRepository.findBy_id(subjects[i]);
+                    if (s.isPresent()){
+                        Subjects tempSub = s.get();
+
+                        Optional<Lecture> lecture = lectureRepository.findBySubject(tempSub.getName());
+
+                        if (lecture.isPresent()){
+                            Lecture tempLecture = lecture.get();
+                            EmailBody = tempLecture.getSubject() + " Start at " + tempLecture.getDate();
+                            EmailSubject = "Subject :- " + tempLecture.getSubject() + "\n" + "Started at :- " +tempLecture.getStartTime() + "\n" + "Lecture Hall :- " + tempLecture.getLectureHall() + "\n" + "Duration :- " + tempLecture.getDuration() + "\n" + "Lecturer :- " + tempLecture.getLecturer();
+                            triggerMail(stud.getEmail(), EmailBody, EmailSubject);
+                        }
+
+                    }
+
+                }
+
+            }
+
+            return null;
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+
+
+    private void triggerMail(String email, String subject, String body) throws MessagingException {
+        senderService.sendSimpleEmail(email, subject, body);
+
     }
 
     private String passwordEncoder(String pass){
