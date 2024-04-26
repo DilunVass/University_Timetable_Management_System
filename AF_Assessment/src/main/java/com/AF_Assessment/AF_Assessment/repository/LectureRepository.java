@@ -9,5 +9,7 @@ import java.util.Optional;
 public interface LectureRepository extends MongoRepository<Lecture, ObjectId> {
     Optional<Lecture> findBy_id(String lectureId);
 
+    Optional<Lecture> findBySubject(String subject);
+
     void deleteBy_id(String lectureId);
 }

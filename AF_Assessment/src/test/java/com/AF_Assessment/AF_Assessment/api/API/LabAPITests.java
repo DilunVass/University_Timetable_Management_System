@@ -87,7 +87,6 @@ public class LabAPITests {
         mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/api/v1/lab/" + LabId)
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isNoContent());
 
     }

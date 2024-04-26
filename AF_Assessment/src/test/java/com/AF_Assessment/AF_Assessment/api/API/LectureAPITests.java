@@ -64,7 +64,29 @@ public class LectureAPITests {
     }
 
     @Test
-    void testUpdateLecture() throws Exception {
-        
+    void testUpdateLectureSuccess() throws Exception {
+
+        String lectureID = "65fefd2e570d4c137706120e";
+        String requestBody = "{\"date\" : \"2024-05-12\", \"startTime\": \"13:30\", \"duration\" : \"5\", \"subject\" : \"SPM\", \"lectureHall\": \"A503\", \"lecturer\": \"dilun@gmail.com\"}";
+
+        mockMvc.perform(MockMvcRequestBuilders.put(baseUrl + "/api/v1/updateLecture/" + lectureID)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    void testDeleteLectureSuccess() throws Exception {
+
+        String lectureID = "";
+
+        // Perform DELETE request to delete the lecturer
+        mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/api/v1/deleteLecture/" + lectureID)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 }
