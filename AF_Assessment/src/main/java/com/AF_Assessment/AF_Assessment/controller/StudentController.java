@@ -70,4 +70,14 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GetMapping("getpracticals/{studentId}")
+    public ResponseEntity<String> getStudentPractical(@PathVariable String studentId) {
+        try {
+            studentService.getStudentPracticals(studentId);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

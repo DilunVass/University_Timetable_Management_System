@@ -2,9 +2,11 @@ package com.AF_Assessment.AF_Assessment.service;
 
 import com.AF_Assessment.AF_Assessment.dto.StudentDTO;
 import com.AF_Assessment.AF_Assessment.model.Lecture;
+import com.AF_Assessment.AF_Assessment.model.Practical;
 import com.AF_Assessment.AF_Assessment.model.Student;
 import com.AF_Assessment.AF_Assessment.model.Subjects;
 import com.AF_Assessment.AF_Assessment.repository.LectureRepository;
+import com.AF_Assessment.AF_Assessment.repository.PracticalRepository;
 import com.AF_Assessment.AF_Assessment.repository.StudentRepository;
 import com.AF_Assessment.AF_Assessment.repository.SubjectsRepository;
 import com.AF_Assessment.AF_Assessment.util.ExtraUtilities;
@@ -32,6 +34,9 @@ public class StudentService {
 
     @Autowired
     private LectureRepository lectureRepository;
+
+    @Autowired
+    private PracticalRepository practicalRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -141,7 +146,7 @@ public class StudentService {
 
                         if (lecture.isPresent()){
                             Lecture tempLecture = lecture.get();
-                            EmailBody = tempLecture.getSubject() + " Start at " + tempLecture.getDate();
+                            EmailBody = tempLecture.getSubject() + "You having lecture on " + tempLecture.getDate();
                             EmailSubject = "Subject :- " + tempLecture.getSubject() + "\n" + "Started at :- " +tempLecture.getStartTime() + "\n" + "Lecture Hall :- " + tempLecture.getLectureHall() + "\n" + "Duration :- " + tempLecture.getDuration() + "\n" + "Lecturer :- " + tempLecture.getLecturer();
                             triggerMail(stud.getEmail(), EmailBody, EmailSubject);
                         }
@@ -150,6 +155,47 @@ public class StudentService {
 
                 }
 
+            }
+
+            return null;
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity getStudentPracticals(String studentId) {
+        try {
+            Optional<Student> student = studentRepository.findBy_id(studentId);
+
+            Student st = student.get();
+            String[] subject;
+            String emailSubject;
+            String emailBody;
+
+            if (student.isPresent()){
+                subject = st.getSubjects();
+
+                int i;
+
+                for (i=0; i<subject.length; i++){
+                    Optional<Subjects> s = subjectsRepository.findBy_id(subject[i]);
+
+                    if (s.isPresent()){
+                        Subjects tempSub = s.get();
+
+                        Optional<Practical> p = practicalRepository.findBySubject(tempSub.getName());
+
+                        if (p.isPresent()){
+                            Practical tempPractical = p.get();
+
+                            emailBody = tempPractical.getSubject() + "You having practical on " + tempPractical.getDate();
+                            emailSubject = "Subject :- " + tempPractical.getSubject() + "\n" + "Started at :- " +tempPractical.getStartTime() + "\n" + "Lecture Hall :- " + tempPractical.getLab() + "\n" + "Duration :- " + tempPractical.getDuration() + "\n" + "Lecturer :- " + tempPractical.getLecturer();
+                            triggerMail(st.getEmail(), emailBody, emailSubject);
+                        }
+
+
+                    }
+                }
             }
 
             return null;

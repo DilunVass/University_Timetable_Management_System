@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface PracticalRepository extends MongoRepository<Practical, ObjectId> {
     Optional<Practical> findBy_id(String id);
+    Optional<Practical> findBySubject(String subject);
 
     void deleteBy_id(String id);
 }
