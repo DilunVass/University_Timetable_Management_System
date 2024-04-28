@@ -52,4 +52,43 @@ public class PracticalAPITests {
 
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void testAddPracticalSuccess() throws Exception {
+
+        String requestBody = "{\"date\": \"2024-06-13\", \"startTime\": \"13:30\", \"duration\": \"2\", \"subject\": \"SPM3\", \"lab\": \"A506\", \"lecturer\": \"dilun01@gmail.com\"}";
+
+        mockMvc.perform(MockMvcRequestBuilders.post(baseUrl + "/api/v1/addPractical")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testUpdatePracticalSuccess() throws Exception {
+
+        String requestBody = "{\"date\": \"2024-05-12\", \"startTime\": \"13:30\", \"duration\": \"2\", \"subject\": \"SPM3\", \"lab\": \"A506\", \"lecturer\": \"dilun01@gmail.com\"}";
+        String practicalId = "65ff2cc20b6e046b1c230b6b";
+
+        mockMvc.perform(MockMvcRequestBuilders.put(baseUrl + "/api/v1/updatePractical/" + practicalId)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testDeletePracticalSuccess() throws Exception {
+
+        String practicalId = "";
+
+        // Perform DELETE request to delete the lecturer
+        mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/api/v1/deletePractical/" + practicalId)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk());
+    }
 }

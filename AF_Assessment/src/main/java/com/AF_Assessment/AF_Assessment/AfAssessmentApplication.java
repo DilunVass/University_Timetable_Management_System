@@ -10,17 +10,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @SpringBootApplication
 public class AfAssessmentApplication {
 
-//	@Autowired
-//	private EmailSenderService senderService;
 	public static void main(String[] args) {
 		SpringApplication.run(AfAssessmentApplication.class, args);
 	}
-//	@EventListener(ApplicationReadyEvent.class)
-//	public void triggerMail() throws MessagingException {
-//		senderService.sendSimpleEmail("dilunvass2001@gmail.com",
-//				"From Dilun",
-//				"Hi this is dilun");
-//
-//	}
+
 
 }

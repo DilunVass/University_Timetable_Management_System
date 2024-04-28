@@ -50,4 +50,56 @@ public class StudentAPITest {
 
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void testAddStudentSuccess() throws Exception {
+
+        String requestBody = "{" +
+                "\"firstName\": \"Dilun\"," +
+                "\"lastName\": \"Ransinshe\"," +
+                "\"email\": \"dilunvass2001@gmail.com\"," +
+                "\"password\": \"xyz21abdn\"," +
+                "\"subjects\": [\"65fd874eed0ee430e781109f\",\"65fd8754ed0ee430e78110a0\"]" +
+                "}";
+
+        mockMvc.perform(MockMvcRequestBuilders.post(baseUrl + "/api/v1/addstudent")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
+    void testUpdateStudentSuccess() throws Exception {
+
+        String requestBody = "{" +
+                "\"firstName\": \"Dilun\"," +
+                "\"lastName\": \"Nishalka\"," +
+                "\"email\": \"dilunvass2001@gmail.com\"," +
+                "\"subjects\": [\"65fd874eed0ee430e781109f\",\"65fd8754ed0ee430e78110a0\"]" +
+                "}";
+
+        String studentId = "662cfed256d09501538ac432";
+
+        mockMvc.perform(MockMvcRequestBuilders.put(baseUrl + "/api/v1/updateStudent/" + studentId)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testDeleteStudentSuccess() throws Exception {
+
+        String studentId = "";
+
+        // Perform DELETE request to delete the student
+        mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/api/v1/deleteStudent/" + studentId)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk());
+    }
 }

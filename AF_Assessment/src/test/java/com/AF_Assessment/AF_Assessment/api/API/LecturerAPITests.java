@@ -104,5 +104,18 @@ public class LecturerAPITests {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
+    void testDeleteLectureSuccess() throws Exception {
+        String lectureId = "";
+
+        // Perform DELETE request to delete the lecturer
+        mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/api/v1/deleteLecture/" + lectureId)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk());
+    }
+
 }
 

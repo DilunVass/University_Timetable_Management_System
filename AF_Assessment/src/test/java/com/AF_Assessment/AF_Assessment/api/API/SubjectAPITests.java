@@ -50,4 +50,48 @@ public class SubjectAPITests {
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON));
     }
+
+
+    @Test
+    void testAddSubjectSuccess() throws Exception {
+
+        String requestBody = "{\"name\": \"DMS\", \"credits\": \"3\", \"description\": \"This is SPM module\", \"lecturerId\": \"65fd783592ea3f1a0cef2aee\"}";
+
+        mockMvc.perform(MockMvcRequestBuilders.post(baseUrl + "/api/v1/addsubject")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testUpdateSubjectSuccess() throws Exception {
+
+        String requestBody = "{\"name\": \"DMS\", \"credits\": \"4\", \"description\": \"This is SPM module updated\", \"lecturerId\": \"65fd783592ea3f1a0cef2aee\"}";
+
+        String subjectId = "662cbbbe9a59103711a5bef1";
+
+        mockMvc.perform(MockMvcRequestBuilders.put(baseUrl + "/api/v1/updateSubject/" + subjectId)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
+    void testDeleteSubjectSuccess() throws Exception {
+        String subjectId = "";
+
+        // Perform DELETE request to delete the subject
+        mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/api/v1/deleteSubject/" + subjectId)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk());
+    }
+
+
+
 }
